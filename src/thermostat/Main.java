@@ -4,7 +4,8 @@ public class Main {
 
 	public static void main(String[] args) throws InterruptedException {
 		// Senses the current temperature
-		Thermometer thermometer = new Thermometer();
+		// Thermometer nach Singleton-Pattern
+		Thermometer thermometer = Thermometer.getInstance();
 
 		Observer heatingSystem = new HeatingSystem();
 		Observer temperatureReader = new TemperatureReader();

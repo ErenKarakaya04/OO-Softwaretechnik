@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Thermometer extends Subject {
+	private Thermometer(){}
+	private static Thermometer thermometer = new Thermometer();
 
+	public static Thermometer getInstance(){
+		return thermometer;
+	}
 	private int currentTemperature;
 	private HardwareSensor sensor = new HardwareSensor();
 	private List<Observer> observers = new ArrayList<>();
