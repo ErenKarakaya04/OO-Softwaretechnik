@@ -9,7 +9,7 @@ public class TrafficLightModel extends Subject{
     private boolean pedestrianWaiting;
     private final List<Observer> observers = new ArrayList<>();
     private final int longPhaseTime = 10000;
-    private final int normalPhaseTime = 5000;
+    private final int normalPhaseTime = 2500;
 
     public void start() throws InterruptedException {
         while(true){

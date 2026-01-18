@@ -9,50 +9,92 @@ public class TrafficLightView implements Observer {
     private final TrafficLightModel model;
     private JFrame frame;
     private JButton button;
-    private JLabel display;
+    private JPanel trafficLightPanel;
+
+    private java.awt.Color redDisplay;
+    private java.awt.Color amberDisplay;
+    private java.awt.Color greenDisplay;
 
     public TrafficLightView(TrafficLightModel model) {
         this.model = model;
 
-        this.frame = new JFrame("Ampelsteuerung");
-        this.button = new JButton("Drücken");
-        this.display = new JLabel("—", SwingConstants.CENTER);
+        frame = new JFrame("Ampelsteuerung");
+        frame.setLayout(new BorderLayout());
 
-        this.frame.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        redDisplay = java.awt.Color.RED.darker().darker();
+        amberDisplay = java.awt.Color.YELLOW.darker().darker();
+        greenDisplay = java.awt.Color.GREEN.darker().darker();
 
-        // Display oben
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        this.frame.add(display, gbc);
+        trafficLightPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
 
-        // Button unten
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.SOUTH;
-        this.frame.add(button, gbc);
+                // Hintergrund
+                g.setColor(java.awt.Color.DARK_GRAY);
+                g.fillRect(0, 0, getWidth(), getHeight());
 
-        this.frame.setSize(300, 300);
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.setVisible(true);
+                // Rot
+                g.setColor(redDisplay);
+                g.fillOval(50, 20, 80, 80);
+
+                // Gelb
+                g.setColor(amberDisplay);
+                g.fillOval(50, 120, 80, 80);
+
+                // Grün
+                g.setColor(greenDisplay);
+                g.fillOval(50, 220, 80, 80);
+            }
+        };
+
+        trafficLightPanel.setBackground(java.awt.Color.BLACK);
+
+        button = new JButton("Fußgänger drücken");
+
+        frame.add(trafficLightPanel, BorderLayout.CENTER);
+        frame.add(button, BorderLayout.SOUTH);
+
+        frame.setSize(220, 380);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
     }
 
     public void addButtonListener(ActionListener listener) {
         button.addActionListener(listener);
     }
 
-    private void renderDisplay(Color state) {
+    // MUSS erhalten bleiben: hier wird die Anzeige "umgeschaltet"
+    private void renderDisplay(trafficlightcontrols.Color state) {
         SwingUtilities.invokeLater(() -> {
-            display.setText("Phase: " + state);
+            // erst alles "aus" (dunkel)
+            redDisplay = java.awt.Color.RED.darker().darker();
+            amberDisplay = java.awt.Color.YELLOW.darker().darker();
+            greenDisplay = java.awt.Color.GREEN.darker().darker();
+
+            // dann abhängig vom Enum "an"
+            switch (state) {
+                case Red:
+                    redDisplay = java.awt.Color.RED;
+                    break;
+                case RedAmber:
+                    redDisplay = java.awt.Color.RED;
+                    amberDisplay = java.awt.Color.YELLOW;
+                    break;
+                case Green:
+                    greenDisplay = java.awt.Color.GREEN;
+                    break;
+                case Amber:
+                    amberDisplay = java.awt.Color.YELLOW;
+                    break;
+            }
+
+            trafficLightPanel.repaint();
         });
     }
 
-
     @Override
-    public void update(Color state) {
+    public void update(trafficlightcontrols.Color state) {
         renderDisplay(state);
     }
 }
