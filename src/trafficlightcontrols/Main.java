@@ -6,7 +6,7 @@ public class Main {
 
          TrafficLightController controller = new TrafficLightController();
          TrafficLightModel model = new TrafficLightModel();
-         TrafficLightView view = new TrafficLightView(model);
+         TrafficLightView view = new TrafficLightView();
 
          controller.setModel(model);
          controller.setView(view);

@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 public class TrafficLightView implements Observer {
 
-    private final TrafficLightModel model;
     private JFrame frame;
     private JButton button;
     private JPanel trafficLightPanel;
@@ -15,8 +14,7 @@ public class TrafficLightView implements Observer {
     private java.awt.Color amberDisplay;
     private java.awt.Color greenDisplay;
 
-    public TrafficLightView(TrafficLightModel model) {
-        this.model = model;
+    public TrafficLightView() {
 
         frame = new JFrame("Ampelsteuerung");
         frame.setLayout(new BorderLayout());
@@ -30,25 +28,19 @@ public class TrafficLightView implements Observer {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                // Hintergrund
                 g.setColor(java.awt.Color.DARK_GRAY);
                 g.fillRect(0, 0, getWidth(), getHeight());
 
-                // Rot
                 g.setColor(redDisplay);
                 g.fillOval(50, 20, 80, 80);
 
-                // Gelb
                 g.setColor(amberDisplay);
                 g.fillOval(50, 120, 80, 80);
 
-                // Grün
                 g.setColor(greenDisplay);
                 g.fillOval(50, 220, 80, 80);
             }
         };
-
-        trafficLightPanel.setBackground(java.awt.Color.BLACK);
 
         button = new JButton("Fußgänger drücken");
 
@@ -64,15 +56,12 @@ public class TrafficLightView implements Observer {
         button.addActionListener(listener);
     }
 
-    // MUSS erhalten bleiben: hier wird die Anzeige "umgeschaltet"
     private void renderDisplay(trafficlightcontrols.Color state) {
         SwingUtilities.invokeLater(() -> {
-            // erst alles "aus" (dunkel)
             redDisplay = java.awt.Color.RED.darker().darker();
             amberDisplay = java.awt.Color.YELLOW.darker().darker();
             greenDisplay = java.awt.Color.GREEN.darker().darker();
 
-            // dann abhängig vom Enum "an"
             switch (state) {
                 case Red:
                     redDisplay = java.awt.Color.RED;
