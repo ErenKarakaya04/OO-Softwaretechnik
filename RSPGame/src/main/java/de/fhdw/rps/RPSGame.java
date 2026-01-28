@@ -2,76 +2,37 @@ package de.fhdw.rps;
 
 import de.fhdw.rps.mvcgui.Observer;
 import de.fhdw.rps.state.GameState;
+import de.fhdw.rps.state.WaitingForPlayerOneState;
+import de.fhdw.rps.state.WaitingForPlayerTwoState;
 
 abstract public class RPSGame extends Subject{
 
-   private Player playerOne;
+   private final Player playerOne = new HumanPlayer();
    private Player playerTwo;
-   private Move pendingMoveP1;
-   private Move pendingMoveP2;
    private GameState state;
 
-   public int[] getPlayerHP() {
-      return new int[]{this.playerOne.hitPoints, this.playerOne.hitPoints};
+   public RPSGame() {
+      this.state = new WaitingForPlayerOneState();
    }
-
-   public void setState(GameState state){
-      this.state = state;
-   }
-
-   public void nextStep(){
-      this.state.performAction(this);
-   }
-
-
 
    //Aufgerufen vom Controller
-   public void playerChooseRock(){processMove(Move.ROCK);}
-   public void playerChoosePaper(){processMove(Move.PAPER);}
-   public void playerChooseScissor(){processMove(Move.SCISSORS);}
-
-   private void processMove(Move move){
-      this.pendingMoveP1 = move;
-      this.nextStep();
-      this.notifyObserver();
+   public void playerChoose(Move move){
+      this.state.performAction(this, move);
    }
 
-   public void evaluateRound(Move p1, Move p2) {
-      if (p1 == null || p2 == null) {
-         throw new IllegalStateException("Moves dürfen nicht null sein");
-      }
+   public void setState (GameState state) { this.state = state; }
+   public GameState getState () { return state; };
+   public void setPlayerOneMove(Move move){ this.playerOne.pendingMove = move; }
+   public void setPlayerTwoMove(Move move){ this.playerTwo.pendingMove = move; }
 
-      switch (p1) {
-         case ROCK -> {
-            if (p2 == Move.SCISSORS) playerTwo.takeDamage();
-            else if (p2 == Move.PAPER) playerOne.takeDamage();
-         }
-         case PAPER -> {
-            if (p2 == Move.ROCK) playerTwo.takeDamage();
-            else if (p2 == Move.SCISSORS) playerOne.takeDamage();
-         }
-         case SCISSORS -> {
-            if (p2 == Move.PAPER) playerTwo.takeDamage();
-            else if (p2 == Move.ROCK) playerOne.takeDamage();
-         }
-      }
-   }
+   public Move getPendingMoveP1() { return this.playerOne.pendingMove; }
+   public Move getPendingMoveP2() { return this.playerTwo.pendingMove; }
 
-   public boolean isGameOver(){
-      return this.playerOne.hitPoints == 0 || this.playerTwo.hitPoints == 0;
-   }
-   public Move getPendingMoveP1(){ return pendingMoveP1; }
-   public Move getPendingMoveP2(){ return pendingMoveP2; }
-   public void setPendingMoveP2(Move move){ this.pendingMoveP2 = move; }
-   public void clearPendingMoves(){
-      playerOne.appendMove(pendingMoveP1);
-      playerTwo.appendMove(pendingMoveP2);
-      this.pendingMoveP1 = null;
-      this.pendingMoveP2 = null;
-   }
+   public int getPlayerOneHP() { return this.playerOne.hitPoints; }
+   public int getPlayerTwoHP() { return this.playerTwo.hitPoints; }
+   public void takeDamageP1(){ playerOne.hitPoints--; }
+   public void takeDamageP2(){ playerTwo.hitPoints--; }
+   public boolean isGameOver(){return this.playerOne.hitPoints == 0 || this.playerTwo.hitPoints == 0;}
+   protected void setPlayerTwo(Player playerTwo) { this.playerTwo = playerTwo; }
 
-   @Override
-   public void notifyObserver() {
-
-   }
 }

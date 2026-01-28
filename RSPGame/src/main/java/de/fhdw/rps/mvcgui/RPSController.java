@@ -1,5 +1,6 @@
 package de.fhdw.rps.mvcgui;
 
+import de.fhdw.rps.Move;
 import de.fhdw.rps.RPSGame;
 
 public class RPSController {
@@ -15,10 +16,10 @@ public class RPSController {
         registerEvent();
     }
 
-    private void registerEvent(){
-        view.setPaperButtonEventListener(e -> model.playerChoosePaper());
-        view.setRockButtonEventListener(e -> model.playerChooseRock());
-        view.setScissorsButtonEventListener(e -> model.playerChooseScissor());
+    public void registerEvent(){
+        view.setPaperButtonEventListener(e -> model.playerChoose(Move.PAPER));
+        view.setRockButtonEventListener(e -> model.playerChoose(Move.ROCK));
+        view.setScissorsButtonEventListener(e -> model.playerChoose(Move.SCISSORS));
     }
 
 }
