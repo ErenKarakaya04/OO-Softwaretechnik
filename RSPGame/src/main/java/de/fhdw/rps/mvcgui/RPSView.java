@@ -28,6 +28,7 @@ public class RPSView implements Observer{
     private ImageIcon rock = new ImageIcon("src/main/resources/rock.png");
     private ImageIcon paper = new ImageIcon("src/main/resources/paper.png");
     private ImageIcon scissors = new ImageIcon("src/main/resources/scissor.png");
+    public ImageIcon unselected = new ImageIcon("src/main/resources/unselected.png");
 
     public RPSView () {
         frame = new JFrame("OOSE RPS Game");
@@ -47,8 +48,8 @@ public class RPSView implements Observer{
         mainPanel.add(createWrapper(hpPlayerTwoLabel));
 
         // Player Row
-        playerOneLabel = new JLabel(rock);
-        playerTwoLabel = new JLabel(rock);
+        playerOneLabel = new JLabel(unselected);
+        playerTwoLabel = new JLabel(unselected);
         actionPanel = new JPanel(new GridLayout(2, 1, 0,50));
         playerOneAction = new JLabel("P1 Action");
         playerTwoAction = new JLabel("P2 Action");
@@ -105,6 +106,12 @@ public class RPSView implements Observer{
         hpPlayerTwoLabel.setText("HP: " + p2Health);
         refreshAction(p1Move, playerOneLabel);
         refreshAction(p2Move, playerTwoLabel);
+
+        if (p1Health == 0 || p2Health == 0) {
+            rockButton.setEnabled(false);
+            paperButton.setEnabled(false);
+            scissorsButton.setEnabled(false);
+        }
 
     }
 }

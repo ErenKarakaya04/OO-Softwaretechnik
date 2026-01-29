@@ -24,10 +24,8 @@ abstract public class RPSGame extends Subject{
    public GameState getState () { return state; };
    public void setPlayerOneMove(Move move){ this.playerOne.pendingMove = move; }
    public void setPlayerTwoMove(Move move){ this.playerTwo.pendingMove = move; }
-
    public Move getPendingMoveP1() { return this.playerOne.pendingMove; }
    public Move getPendingMoveP2() { return this.playerTwo.pendingMove; }
-
    public int getPlayerOneHP() { return this.playerOne.hitPoints; }
    public int getPlayerTwoHP() { return this.playerTwo.hitPoints; }
    public void takeDamageP1(){ playerOne.hitPoints--; }
