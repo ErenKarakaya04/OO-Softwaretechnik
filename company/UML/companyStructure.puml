@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam linetype ortho
+
+abstract class PersonnelUnit{
+    -String name
+    +String getName()
+    +void add(PersonnelUnit c)
+    +void remove(PersonnelUnit c)
+    +PersonnelUnit getChild(int index)
+}
+
+class Department{
+    +int getSalary()
+    +List<PersonnelUnit> getPersonnelUnits()
+}
+
+class Employee{
+    -int salary
+    +int getSalary()
+}
+
+Department o-up-> "0..n" PersonnelUnit :personnelUnits
+Department -up-|> PersonnelUnit
+Employee --|> PersonnelUnit
+@enduml
